@@ -9,7 +9,18 @@ Sistema distribuido para la gestión de un parqueadero utilizando:
 - Interfaz gráfica con Tkinter
 - Control de versiones con Git y GitHub
 
----
+EJECICION DEL PROYECTO
+servidor/server.exe
+
+LUEGO
+
+cliente/client.exe
+
+en esta parte se va acrualizando en el data/parqueadero.txt
+
+py visualizador/visualizador.py
+
+y ahi aparece los carro
 
 # Estructura del Proyecto
 
