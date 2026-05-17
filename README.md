@@ -16,7 +16,7 @@ LUEGO
 
 cliente/client.exe
 
-en esta parte se va acrualizando en el data/parqueadero.txt
+en esta parte se va actualizando en el data/parqueadero.txt
 
 py visualizador/visualizador.py
 
