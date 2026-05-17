@@ -1,4 +1,5 @@
 *.exe
-*.dll
-*.o
-*.pyc
+*.pyd
+*_wrap.cxx
+parqueadero.py
+__pycache__/

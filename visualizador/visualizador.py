@@ -1,17 +1,15 @@
-import tkinter as tk
-from tkinter import ttk
 import os
-from ctypes import CDLL, c_char_p
-
 os.add_dll_directory(r"C:\msys64\ucrt64\bin")
 
-ruta_dll = os.path.abspath("dll/parqueadero_dll.dll")
-dll = CDLL(ruta_dll)
-dll.obtenerDatosParqueadero.restype = c_char_p
+import tkinter as tk
+from tkinter import ttk
+import parqueadero
+
+TOTAL_CELDAS = 20
 
 ventana = tk.Tk()
 ventana.title("Visualizador Parqueadero")
-ventana.geometry("600x400")
+ventana.geometry("700x500")
 
 titulo = tk.Label(
     ventana,
@@ -19,6 +17,22 @@ titulo = tk.Label(
     font=("Arial", 18, "bold")
 )
 titulo.pack(pady=10)
+
+resumen = tk.Label(
+    ventana,
+    text="Ocupadas: 0 | Disponibles: 20",
+    font=("Arial", 12, "bold")
+)
+resumen.pack(pady=5)
+
+celdas_libres_label = tk.Label(
+    ventana,
+    text="Celdas libres: 1, 2, 3, ..., 20",
+    font=("Arial", 10),
+    wraplength=650,
+    justify="center"
+)
+celdas_libres_label.pack(pady=5)
 
 tabla = ttk.Treeview(
     ventana,
@@ -28,7 +42,7 @@ tabla = ttk.Treeview(
 
 tabla.heading("placa", text="Placa")
 tabla.heading("hora", text="Hora Entrada")
-tabla.heading("celda", text="Celda")
+tabla.heading("celda", text="Celda Ocupada")
 
 tabla.pack(fill="both", expand=True, padx=20, pady=20)
 
@@ -36,9 +50,10 @@ def actualizar():
     for item in tabla.get_children():
         tabla.delete(item)
 
-    datos = dll.obtenerDatosParqueadero().decode("utf-8")
-
+    datos = parqueadero.obtenerDatosParqueadero()
     lineas = datos.strip().split("\n")
+
+    celdas_ocupadas = set()
 
     for linea in lineas:
         if linea.strip() != "":
@@ -46,6 +61,25 @@ def actualizar():
             if len(partes) == 3:
                 placa, hora, celda = partes
                 tabla.insert("", "end", values=(placa, hora, celda))
+
+                try:
+                    celdas_ocupadas.add(int(celda))
+                except ValueError:
+                    pass
+
+    celdas_libres = []
+
+    for i in range(1, TOTAL_CELDAS + 1):
+        if i not in celdas_ocupadas:
+            celdas_libres.append(i)
+
+    resumen.config(
+        text=f"Ocupadas: {len(celdas_ocupadas)} | Disponibles: {len(celdas_libres)}"
+    )
+
+    celdas_libres_label.config(
+        text="Celdas libres: " + ", ".join(map(str, celdas_libres))
+    )
 
     ventana.after(1000, actualizar)
 
