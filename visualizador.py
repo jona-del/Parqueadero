@@ -1,9 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from ctypes import CDLL, c_char_p
-
-dll = CDLL("../dll/parqueadero_dll.dll")
-dll.obtenerDatosParqueadero.restype = c_char_p
+import parqueadero
 
 ventana = tk.Tk()
 ventana.title("Visualizador Parqueadero")
@@ -32,7 +29,7 @@ def actualizar():
     for item in tabla.get_children():
         tabla.delete(item)
 
-    datos = dll.obtenerDatosParqueadero().decode("utf-8")
+    datos = parqueadero.obtenerDatosParqueadero()
 
     lineas = datos.strip().split("\n")
 
