@@ -10,6 +10,7 @@
 #pragma comment(lib, "ws2_32.lib")
 
 #define PORT 8080
+#define TOTAL_CELDAS 20
 
 using namespace std;
 
@@ -32,25 +33,48 @@ void guardarEstado() {
     archivo.close();
 }
 
+int obtenerCeldaLibre() {
+    bool ocupadas[TOTAL_CELDAS + 1] = {false};
+
+    for (auto const& item : parqueadero) {
+        int celda = item.second.celda;
+
+        if (celda >= 1 && celda <= TOTAL_CELDAS) {
+            ocupadas[celda] = true;
+        }
+    }
+
+    for (int i = 1; i <= TOTAL_CELDAS; i++) {
+        if (!ocupadas[i]) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 void procesarMensaje(string mensaje) {
     stringstream ss(mensaje);
 
     string placa;
     string hora;
-    string celdaTexto;
 
     getline(ss, placa, '|');
     getline(ss, hora, '|');
-    getline(ss, celdaTexto, '|');
 
-    if (placa.empty() || hora.empty() || celdaTexto.empty()) {
+    if (placa.empty() || hora.empty()) {
         cout << "Mensaje invalido recibido: " << mensaje << endl;
         return;
     }
 
-    int celda = stoi(celdaTexto);
-
     if (parqueadero.find(placa) == parqueadero.end()) {
+        int celda = obtenerCeldaLibre();
+
+        if (celda == -1) {
+            cout << "PARQUEADERO LLENO -> No hay celdas disponibles." << endl;
+            return;
+        }
+
         Vehiculo nuevo;
         nuevo.placa = placa;
         nuevo.hora = hora;
@@ -60,7 +84,7 @@ void procesarMensaje(string mensaje) {
 
         cout << "ENTRADA -> Placa: " << placa
              << " | Hora: " << hora
-             << " | Celda: " << celda << endl;
+             << " | Celda asignada: " << celda << endl;
     } else {
         cout << "SALIDA -> Placa: " << placa
              << " | Celda liberada: " << parqueadero[placa].celda << endl;
