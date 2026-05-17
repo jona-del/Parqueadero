@@ -1,4 +1,4 @@
-#  Proyecto Parqueadero con Sockets, DLL y SWIG
+#  Proyecto Parqueadero 
 
 Sistema distribuido para la gestión de un parqueadero utilizando:
 
@@ -10,6 +10,7 @@ Sistema distribuido para la gestión de un parqueadero utilizando:
 - Control de versiones con Git y GitHub
 
 EJECICION DEL PROYECTO
+en la terminal se coloca
 servidor/server.exe
 
 LUEGO
@@ -20,7 +21,12 @@ en esta parte se va actualizando en el data/parqueadero.txt
 
 py visualizador/visualizador.py
 
-y ahi aparece los carro
+y ahi aparece las placas de los carros con la interfaz de:
+
+Vehículos estacionados
+Hora de entrada
+Celdas ocupadas
+Celdas disponibles 
 
 # Estructura del Proyecto
 
