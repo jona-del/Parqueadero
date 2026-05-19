@@ -37,10 +37,6 @@ string obtenerHora() {
     return string(buffer);
 }
 
-int generarCelda() {
-    return 1 + rand() % 20;
-}
-
 int main() {
     srand(time(0));
 
@@ -63,7 +59,10 @@ int main() {
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
-    serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    // Para pruebas en el mismo PC:
+    serv_addr.sin_addr.s_addr = inet_addr("10.2.15.145");
+
 
     if (connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == SOCKET_ERROR) {
         cerr << "Error conectando con servidor" << endl;
@@ -77,9 +76,8 @@ int main() {
     while (true) {
         string placa = generarPlaca();
         string hora = obtenerHora();
-        int celda = generarCelda();
 
-        string mensaje = placa + "|" + hora + "|" + to_string(celda);
+        string mensaje = placa + "|" + hora;
 
         send(sock, mensaje.c_str(), mensaje.length(), 0);
 
