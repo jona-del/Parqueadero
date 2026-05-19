@@ -61,7 +61,7 @@ int main() {
     serv_addr.sin_port = htons(PORT);
 
     // Para pruebas en el mismo PC:
-    serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serv_addr.sin_addr.s_addr = inet_addr("10.2.15.145");
 
 
     if (connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == SOCKET_ERROR) {
